@@ -11,7 +11,3 @@ export const DEFAULT_WORKFLOW = {
   label: "Default Flow",
   value: DEFAULT_WORKFLOW_PROCESS_KEY,
 };
-
-export const ACCESSIBLE_FOR_ALL_GROUPS = 'Accessible for all users';
-export const PRIVATE_ONLY_YOU = 'Private (Only You)';
-export const SPECIFIC_USER_OR_GROUP = 'Specific User/ Group';

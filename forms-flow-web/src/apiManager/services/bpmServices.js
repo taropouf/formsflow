@@ -44,7 +44,6 @@ export const formatForms = (forms) => {
       processKey: form.processKey,
       status: form.status,
       anonymous: form.anonymous,
-      description:form.description,
       created: form.created,
       formType: form.formType
     };

@@ -16,13 +16,9 @@ import { useTranslation } from "react-i18next";
 
 import {
   setApplicationListActivePage,
-  setApplicationLoading,
-  setApplicationSortBy,
-  setApplicationSortOrder,
   setCountPerpage,
 } from "../../actions/applicationActions";
 import { push } from "connected-react-router";
-import LoadingOverlay from "react-loading-overlay";
 
 const ApplicationTable = () => {
   const dispatch = useDispatch();
@@ -39,10 +35,6 @@ const ApplicationTable = () => {
   const userRoles = useSelector((state) => state.user.roles);
   const pageNo = useSelector((state) => state.applications?.activePage);
   const limit = useSelector((state) => state.applications?.countPerPage);
-  const sortOrder = useSelector((state) => state.applications?.sortOrder);
-  const sortBy = useSelector((state) => state.applications?.sortBy);
-  const isApplicationLoading = useSelector((state) => state.applications.isApplicationLoading);
-  const isAscending = sortOrder === "asc" ? true : false;
   const totalForms = useSelector(
     (state) => state.applications?.applicationCount
   );
@@ -91,6 +83,8 @@ const ApplicationTable = () => {
     dispatch(push(`${redirectUrl}application/${data.id}`));
   };
 
+ 
+
   const  viewSubmissionDetails = (data) => (
     <button className="btn btn-link mt-2" onClick={() => submissionDetails(data)}>
       <Translation>{(t) => t("View Details")}</Translation>{" "}
@@ -113,34 +107,25 @@ const ApplicationTable = () => {
   };
 
   const handlePageChange = (page) => {
-    dispatch(setApplicationLoading(true));
     dispatch(setApplicationListActivePage(page));
   };
 
   const onSizePerPageChange = (limit) => {
-    dispatch(setApplicationLoading(true));
     setPageLimit(limit);
     dispatch(setCountPerpage(limit));
     dispatch(setApplicationListActivePage(1));
   };
 
-  const updateSort = (sortOrder,sortBy) => {
-    dispatch(setApplicationLoading(true));
-    dispatch(setApplicationSortOrder(sortOrder));
-    dispatch(setApplicationSortBy(sortBy));
-    dispatch(setApplicationListActivePage(1));
-  };
-
   return (
     <>
-    <LoadingOverlay active={isApplicationLoading} spinner text={t("Loading...")}>
+      <div style={{ minHeight: "400px" }}>
         <table className="table custom-table table-responsive-sm">
           <thead>
             <tr>
-              <th>{t("Id")} {isAscending && sortBy === 'id' ? <i  onClick={() => updateSort('desc','id')} className="fa-sharp fa-solid fa-arrow-down-9-1" /> :  <i onClick={() => updateSort('asc','id')} className="fa-sharp fa-solid fa-arrow-up-1-9" />} </th>
-              <th>{t("Form Title")} {isAscending && sortBy === 'applicationName' ? <i onClick={() =>updateSort('desc','applicationName')} className="fa-sharp fa-solid fa-arrow-down-a-z"/> : <i onClick={() =>updateSort('asc','applicationName')}   className="fa-sharp fa-solid fa-arrow-up-z-a"/>}</th>
-              <th>{t("Status")}{isAscending && sortBy === 'applicationStatus' ? <i onClick={() =>updateSort('desc','applicationStatus')} className="fa-sharp fa-solid fa-arrow-down-a-z  ml-2"/> : <i onClick={() =>updateSort('asc','applicationStatus')}   className="fa-sharp fa-solid fa-arrow-up-z-a  ml-2"/>}</th>
-              <th>{t("Last Modified")}{isAscending && sortBy === 'modified' ? <i onClick={() =>updateSort('desc','modified')} className="fa-sharp fa-solid fa-arrow-down-9-1  ml-2"/> : <i onClick={() =>updateSort('asc','modified')} className="fa-sharp fa-solid fa-arrow-up-1-9  ml-2"/>}</th>
+              <th>{t("Id")}</th>
+              <th>{t("Form Title")}</th>
+              <th>{t("Status")}</th>
+              <th>{t("Last Modified")}</th>
               <th colSpan="4">
                 <div className="d-flex justify-content-end filter-sort-bar mt-1">
                   <div className="filter-container-list application-filter-list-view">
@@ -193,7 +178,7 @@ const ApplicationTable = () => {
             })}
           </tbody>
         </table>
-      </LoadingOverlay>
+      </div>
       <div className="d-flex justify-content-between align-items-center  flex-column flex-md-row">
         <div className="d-flex align-items-center">
         <span className="mr-2"> {t("Rows per page")}</span>

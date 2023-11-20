@@ -71,7 +71,7 @@ const List = React.memo((props) => {
   const designerFormLoading = useSelector(
     (state) => state.formCheckList.designerFormLoading
   );
-  const searchText = useSelector((state) => state.bpmForms.searchText);
+  const searchText = useSelector((state) => state.bpmForms.searchText); 
 
   const isDesigner = userRoles.includes(STAFF_DESIGNER);
   const pageNo = useSelector((state) => state.bpmForms.page);
@@ -133,12 +133,14 @@ const List = React.memo((props) => {
     let response = "";
 
     if (result.resource) {
-      response = `${result.resource} ${result.resource == 1 ? t("Resource") : t("Resources")
-        }`;
+      response = `${result.resource} ${
+        result.resource == 1 ? t("Resource") : t("Resources")
+      }`;
     }
     if (result.form) {
-      response += `${result.resource ? " ," : ""} ${result.form} ${result.form == 1 ? t("Form") : t("Forms")
-        }`;
+      response += `${result.resource ? " ," : ""} ${result.form} ${
+        result.form == 1 ? t("Form") : t("Forms")
+      }`;
     }
     return toast.success(`${response} ${t("Downloaded Successfully")}`);
   };
@@ -293,7 +295,7 @@ const List = React.memo((props) => {
                                               formObj.components
                                             ) ||
                                             newFormData.display !==
-                                            formObj.display ||
+                                              formObj.display ||
                                             newFormData.type !== formObj.type;
                                           newFormData.parentFormId =
                                             mapperData.parentFormId;
@@ -473,7 +475,7 @@ const List = React.memo((props) => {
         onClose={() => setShowFormUploadModal(false)}
       />
       {(forms.isActive || designerFormLoading || isBPMFormListLoading) &&
-        !searchFormLoading ? (
+      !searchFormLoading ? (
         <div data-testid="Form-list-component-loader">
           <Loading />
         </div>
@@ -496,11 +498,11 @@ const List = React.memo((props) => {
                         ? props.formName
                         : textTruncate(50, 40, props.formName)}
                     </span>
-                    .<br /> <span>{`${t("Are you sure to delete the")} ${formProcessData.formType} `}</span> ?
+                    .{t("Are you sure you wish to delete the form?")}
                   </div>
                 ) : (
                   <div>
-                    <span>{`${t("Are you sure to delete the")} ${formProcessData.formType} `}</span>
+                    {`${t("Are you sure you wish to delete the form ")}`}
                     <span style={{ fontWeight: "bold" }}>
                       {textTruncate(60, 40, props.formName)}
                     </span>
@@ -509,12 +511,12 @@ const List = React.memo((props) => {
                 )
               ) : (
                 <div>
-                    <span>{`${t("Are you sure to delete the")} ${formProcessData.formType} `}</span>
-                    <span style={{ fontWeight: "bold" }}>
-                      {textTruncate(60, 40, props.formName)}
-                    </span>
-                    ?
-                  </div>
+                  {`${t("Are you sure you wish to delete the form ")} `}
+                  <span style={{ fontWeight: "bold" }}>
+                    {textTruncate(60, 40, props.formName)}
+                  </span>
+                  ?
+                </div>
               )
             }
             onNo={() => onNo()}

@@ -32,7 +32,6 @@ const ServiceFlowTaskList = React.memo(() => {
   const dispatch = useDispatch();
   const processList = useSelector((state) => state.bpmTasks.processList);
   const selectedFilter = useSelector((state) => state.bpmTasks.selectedFilter);
-  const firstResult = useSelector((state) => state.bpmTasks.firstResult);
   const activePage = useSelector((state) => state.bpmTasks.activePage);
   const tasksPerPage = MAX_RESULTS;
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
@@ -44,9 +43,9 @@ const ServiceFlowTaskList = React.memo(() => {
     if (selectedFilter) {
       dispatch(setBPMTaskLoader(true));
       dispatch(setBPMTaskListActivePage(1));
-      dispatch(fetchServiceTaskList(reqData,null,firstResult));
+      dispatch(fetchServiceTaskList(selectedFilter.id, 0, reqData));
     }
-  }, [reqData]);
+  }, [dispatch, selectedFilter, reqData]);
 
   const getTaskDetails = (taskId) => {
     if (taskId !== bpmTaskId) {
@@ -59,7 +58,7 @@ const ServiceFlowTaskList = React.memo(() => {
     dispatch(setBPMTaskLoader(true));
     let firstResultIndex = getFirstResultIndex(pageNumber);
     dispatch(
-      fetchServiceTaskList(reqData,null,firstResultIndex)
+      fetchServiceTaskList(selectedFilter.id, firstResultIndex, reqData)
     );
   };
 

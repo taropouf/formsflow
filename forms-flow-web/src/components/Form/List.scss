@@ -12,18 +12,19 @@
 }
 
 .published-forms-label{
-    color: #52C41A;
+    color: #2F6846;
     background: #EAFBE7 0% 0% no-repeat padding-box;
-    border: 1px solid #52C41A;
+    border: 1px solid #C6F0C2;
     border-radius: 7px;
 }
 
 .unpublished-forms-label{
-    background: #E6F7FF 0% 0% no-repeat padding-box;
+    background: #EAF5FF 0% 0% no-repeat padding-box;
     border-radius: 7px;
-    border: 1px solid #91D5FF;
-    color: #1890FF;
+    border: 1px solid #B8E1FF;
+    color: #006096;
 }
+
 .custom-grid {
     .col {
         min-height: 50px;
@@ -47,7 +48,7 @@
     .h5 {
         font-weight: 400 !important;
     }
-
+    
     .select {
         max-width: 105px !important;
     }
@@ -167,6 +168,3 @@ flex-wrap: wrap;
  .custom-button {
     width: auto;
   }
-.form-description-p-tag > p{
-    word-wrap: break-word;
-}

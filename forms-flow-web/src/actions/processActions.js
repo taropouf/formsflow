@@ -155,10 +155,3 @@ export const setBpmnModel = (data) => (dispatch) => {
     payload: data,
   });
 };
-
-export const setIsPublicDiagram = (data) => (dispatch) => {
-  dispatch({
-    type: ACTION_CONSTANTS.IS_PUBLIC_DIAGRAM,
-    payload: data,
-  });
-};

@@ -22,7 +22,7 @@ const initialState = {
   userList: [],
   filterList: [],
   isFilterLoading: true,
-  selectedFilter: {},
+  selectedFilter: null,
   taskId: null,
   filterListSortParams: { sorting: [{ ...TASK_FILTER_LIST_DEFAULT_PARAM }] },
   filterSearchSelections: [],
@@ -35,11 +35,7 @@ const initialState = {
   taskFormSubmissionReload: false,
   activePage: 1,
   firstResult: 0,
-  selectedTaskVariables :{},
-  viewType:true,
-  error: '',
-  filtersAndCount:[],
-  vissibleAttributes : {},
+  error: ''
 };
 
 const bpmTasks = (state = initialState, action) => {
@@ -57,7 +53,7 @@ const bpmTasks = (state = initialState, action) => {
     case ACTION_CONSTANTS.BPM_USER_LIST:
       return { ...state, userList: action.payload };
     case ACTION_CONSTANTS.BPM_TASKS_COUNT:
-      return { ...state, tasksCount: action.payload};
+      return { ...state, tasksCount: action.payload.count };
     case ACTION_CONSTANTS.BPM_TASK_DETAIL:
       return { ...state, taskDetail: action.payload };
     case ACTION_CONSTANTS.IS_BPM_TASK_UPDATING:
@@ -134,23 +130,12 @@ const bpmTasks = (state = initialState, action) => {
         activePage: action.payload,
         firstResult: getFirstResultIndex(action.payload),
       };
-    case ACTION_CONSTANTS.SELETED_TASK_VARIABLES:
-        return { ...state, selectedTaskVariables: action.payload };
-    case ACTION_CONSTANTS.VIEW_TYPE:
-        return { ...state, viewType: action.payload };
-    case ACTION_CONSTANTS.UPDATE_FILTER_SEARCH_PARAMS:
-        return { ...state, filterListSearchParams: action.payload };    
-
     case ACTION_CONSTANTS.BPM_ERROR:
         return {
           ...state,
           taskId: null,
           error: action.payload
         };
-    case ACTION_CONSTANTS.BPM_FILTERS_AND_COUNT:
-        return { ...state, filtersAndCount: action.payload };
-    case ACTION_CONSTANTS.BPM_VISSIBLE_ATTRIBUTES:
-        return { ...state, vissibleAttributes: action.payload };
     default:
       return state;
   }

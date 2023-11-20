@@ -4,7 +4,6 @@ import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDrafts } from "../../apiManager/services/draftService";
 import { useTranslation } from "react-i18next";
-import { setDraftListLoading } from "../../actions/draftActions";
 
 const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
   const dispatch = useDispatch();
@@ -16,8 +15,6 @@ const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
   );
   const pageNo = useSelector((state) => state.draft?.activePage);
   const limit = useSelector((state) => state.draft?.countPerPage);
-  const sortOrder = useSelector((state) => state.draft.sortOrder);
-  const sortBy = useSelector((state) => state.draft.sortBy);
   const { t } = useTranslation();
   const handleClick = (e) => {
     if (createSearchNode?.current?.contains(e.target)) {
@@ -41,7 +38,6 @@ const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
   };
 
   const clearAllFilters = () => {
-    dispatch(setDraftListLoading(true));
     setDraftId("");
     setDraftName("");
     setLastModified(null);
@@ -52,33 +48,20 @@ const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
       modified: null,
       page: pageNo,
       limit: limit,
-      sortOrder,
-      sortBy
     };
-    dispatch(fetchDrafts(filters,(err,data) => {
-      if(data){
-      dispatch(setDraftListLoading(false));
-      }
-    }));
+    dispatch(fetchDrafts(filters));
   };
 
   const applyFilters = () => {
-    dispatch(setDraftListLoading(true));
     let filterParams = {
       draftName: draftName,
       id: draftId,
       modified: lastModified,
       page: pageNo,
       limit: limit,
-      sortOrder,
-      sortBy
     };
     setFilterParams(filterParams);
-    dispatch(fetchDrafts(filterParams,(err,data) => {
-      if(data){
-      dispatch(setDraftListLoading(false));
-      }
-    }));
+    dispatch(fetchDrafts(filterParams));
   };
 
   return (
@@ -102,7 +85,7 @@ const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
       <div className="m-4 px-2">
         <Row className="mt-2">
           <Col>
-          <label>{t("Id")}</label>
+          <label>{t("Draft Id")}</label>
             <input
               className="form-control"
               placeholder=""
@@ -111,7 +94,7 @@ const DraftFilter = ({ setDisplayFilter, filterParams, setFilterParams }) => {
             />
           </Col>
           <Col>
-          <label>{t("Title")}</label>
+          <label>{t("Draft Name")}</label>
             <input
               className="form-control"
               placeholder=""

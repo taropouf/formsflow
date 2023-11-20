@@ -4,6 +4,7 @@ import API from "../endpoints";
 import { StorageService, RequestService } from "@formsflow/service";
 import {
   setBPMTaskLoader,
+  setBPMTaskList,
   serviceActionError,
   setBPMTaskDetailLoader,
   setBPMTaskDetail,
@@ -16,8 +17,6 @@ import {
   setBPMTaskGroupsLoading,
   setBPMTaskCount,
   bpmActionError,
-  setBPMTaskList,
-  setVisibleAttributes,
 } from "../../actions/bpmTaskActions";
 import { replaceUrl } from "../../helper/helper";
 import axios from "axios";
@@ -25,11 +24,22 @@ import { taskDetailVariableDataFormatter } from "./formatterService";
 import { REVIEWER_GROUP } from "../../constants/userContants";
 import { MAX_RESULTS } from "../../components/ServiceFlow/constants/taskConstants";
 
-export const fetchServiceTaskList = (reqData, taskIdToRemove, firstResult, maxResults, ...rest) => {
+export const fetchServiceTaskList = (
+  filterId,
+  firstResult,
+  reqData,
+  taskIdToRemove,
+  ...rest
+) => {
   const done = rest.length ? rest[0] : () => {};
-  const apiUrlgetTaskList =
-    `${API.GET_BPM_TASK_FILTERS}?firstResult=${firstResult}&maxResults=${ 
-      maxResults ? maxResults : MAX_RESULTS}`;
+  let apiUrlgetTaskList = replaceUrl(
+    API.GET_BPM_TASK_LIST_WITH_FILTER,
+    "<filter_id>",
+    filterId
+  );
+
+  apiUrlgetTaskList = `${apiUrlgetTaskList}?firstResult=${firstResult}&maxResults=${MAX_RESULTS}`;
+
   return (dispatch) => {
     RequestService.httpPOSTRequestWithHAL(
       apiUrlgetTaskList,
@@ -39,8 +49,8 @@ export const fetchServiceTaskList = (reqData, taskIdToRemove, firstResult, maxRe
       .then((res) => {
         if (res.data) {
           let responseData = res.data;
-          const _embedded = responseData[0]?._embedded; // data._embedded.task is where the task list is.
-          if (!_embedded || !_embedded["task"] || !responseData[0]?.count) {
+          const _embedded = responseData["_embedded"]; // data._embedded.task is where the task list is.
+          if (!_embedded || !_embedded["task"] || !responseData["count"]) {
             // Display error if the necessary values are unavailable.
             // console.log("Error", res);
             dispatch(setBPMTaskList([]));
@@ -50,10 +60,11 @@ export const fetchServiceTaskList = (reqData, taskIdToRemove, firstResult, maxRe
           } else {
             const taskListFromResponse = _embedded["task"]; // Gets the task array
             const taskCount = {
-              count: responseData[0]?.count,
+              count: responseData["count"],
             };
             let taskData = taskListFromResponse;
             if (taskIdToRemove) {
+              // console.log("task----",taskIdToRemove);
               //if the list has the task with taskIdToRemove remove that task and decrement
               if (
                 taskListFromResponse.find((task) => task.id === taskIdToRemove)
@@ -64,16 +75,15 @@ export const fetchServiceTaskList = (reqData, taskIdToRemove, firstResult, maxRe
                 taskCount["count"]--; // Count has to be decreased since one task id is removed.
               }
             }
-            dispatch(setBPMTaskCount(taskCount.count));
+            dispatch(setBPMTaskCount(taskCount));
             dispatch(setBPMTaskList(taskData));
-            dispatch(setVisibleAttributes(responseData[1]));
             dispatch(setBPMTaskLoader(false));
             done(null, taskData);
           }
         } else {
           // console.log("Error", res);
-          dispatch(setBPMTaskCount(0));
           dispatch(setBPMTaskList([]));
+          dispatch(setBPMTaskCount(0));
           dispatch(serviceActionError(res));
           dispatch(setBPMTaskLoader(false));
         }
@@ -185,7 +195,7 @@ export const fetchUserListWithSearch = ({ searchType, query }, ...rest) => {
 
 export const fetchFilterList = (...rest) => {
   const done = rest.length ? rest[0] : () => {};
-  const getTaskFiltersAPI = `${API.GET_FILTERS}/user`;
+  const getTaskFiltersAPI = `${API.GET_BPM_FILTERS}?resourceType=Task&itemCount=true`;
   return (dispatch) => {
     RequestService.httpGETRequest(
       getTaskFiltersAPI,
@@ -195,6 +205,7 @@ export const fetchFilterList = (...rest) => {
       .then((res) => {
         if (res.data) {
           dispatch(setBPMFilterList(res.data));
+          dispatch(setBPMFilterLoader(false));
           //dispatch(setBPMLoader(false));
           done(null, res.data);
         } else {
@@ -229,9 +240,7 @@ export const getBPMTaskDetail = (taskId, ...rest) => {
   );
 
   const taskDetailReq = RequestService.httpGETRequest(apiUrlgetTaskDetail);
-  const taskDetailsWithVariableReq = RequestService.httpGETRequest(
-    apiUrlgetTaskVariables
-  );
+  const taskDetailsWithVariableReq = RequestService.httpGETRequest(apiUrlgetTaskVariables);
 
   return (dispatch) => {
     axios
@@ -453,26 +462,3 @@ export const onBPMTaskFormSubmit = (taskId, formReq, ...rest) => {
       });
   };
 };
-
-export const saveFilters = (data) => {
-  return RequestService.httpPOSTRequest(`${API.GET_FILTERS}`, data);
-};
-
-export const editFilters = (data, id) => {
-  return RequestService.httpPUTRequest(`${API.GET_FILTERS}/${id}`, data);
-};
-
-export const deleteFilters = (id) => {
-  return RequestService.httpDELETERequest(`${API.GET_FILTERS}/${id}`);
-};
-
-export const fetchBPMTaskCount = (data) => {
-  return RequestService.httpPOSTRequest(
-    `${API.GET_BPM_TASK_FILTERS}/count`,
-    data
-  );
-};
-
-// export const fetchBPMTaskDetail = (data) => {
-//   return RequestService.httpPOSTRequest(`${API.GET_BPM_TASK_FILTERS}`, data);
-// };

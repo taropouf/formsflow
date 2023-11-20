@@ -125,7 +125,7 @@ const PrivateRoute = React.memo((props) => {
         instance.initKeycloak((authenticated) => {
           if(!authenticated)
           {
-           toast.error("Unauthorized Access.",{autoClose: 3000});
+           toast.error("Unauthorized Access.",{autoClose: 3000}); 
            setTimeout(function() {
             instance.userLogout();
           }, 3000);
@@ -151,7 +151,7 @@ const PrivateRoute = React.memo((props) => {
               userRoles.includes(STAFF_DESIGNER) ? (
                 <Component {...props} />
               ) : (
-                <>unauthorized</>
+                <Redirect exact to="/404" />
               )
             }
           />
@@ -169,7 +169,7 @@ const PrivateRoute = React.memo((props) => {
               userRoles.includes(STAFF_REVIEWER) ? (
                 <Component {...props} />
               ) : (
-                <>unauthorized</>
+                <Redirect exact to="/404" />
               )
             }
           />
@@ -188,7 +188,7 @@ const PrivateRoute = React.memo((props) => {
               userRoles.includes(CLIENT) ? (
                 <Component {...props} />
               ) : (
-                <>unauthorized</>
+                <Redirect exact to="/404" />
               )
             }
           />
@@ -208,7 +208,7 @@ const PrivateRoute = React.memo((props) => {
                 userRoles.includes(CLIENT)) ? (
                 <Component {...props} />
               ) : (
-                <>unauthorized</>
+                <Redirect exact to="/404" />
               )
             }
           />

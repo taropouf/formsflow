@@ -96,8 +96,8 @@ const Preview = React.memo(
       );
       setClientSelectedOption(
         FORM?.roles?.length ? "Specific Users" : "All Users"
-        );
-setReviewerSelectedOption(
+      );
+      setReviewerSelectedOption(
         APPLICATION?.roles?.length ? "Specific Reviewers" : "All Reviewers"
       );
 
@@ -149,7 +149,7 @@ setReviewerSelectedOption(
       if (deletedValue) {
         setClientOptions((prev) => [deletedValue, ...prev]);
       }
-};
+    };
 
     const removeReviewerUserGroup = (group) => {
       let newReviewers = reviewerGroups?.filter((item) => item !== group);
@@ -202,7 +202,7 @@ setReviewerSelectedOption(
         payload.roles = [];
       }
 
-if (reviewerSelectedOption === "Specific Reviewers") {
+      if (reviewerSelectedOption === "Specific Reviewers") {
         payload.roles = reviewerGroups;
       }
       return payload;
@@ -217,6 +217,7 @@ if (reviewerSelectedOption === "Specific Reviewers") {
         console.log(err);
       });
     };
+
     return (
       <div className="m-3">
         <div className="d-flex justify-content-md-end align-items-center">
@@ -253,7 +254,7 @@ if (reviewerSelectedOption === "Specific Reviewers") {
                       {formData && formData?.form && formData?.form?.title
                         ? formData?.form?.title
                         : "-"}
-                     </span>
+                    </span>
                   </div>
                   <div className="d-flex flex-column flex-md-row my-2">
                   <div className="font-weight-bold col-md-2 col-12">
@@ -403,9 +404,8 @@ if (reviewerSelectedOption === "Specific Reviewers") {
                             </Popover>
                           )}
                         >
-                          <Button id="addDesigner" className="btn btn-primary  btn-small">
-                          <i className="fa-solid fa-plus mr-2"></i>
-                            <Translation>{(t) => t("Add")}</Translation>
+                          <Button id="addDesigner" className="btn btn-primary btn-md form-btn pull-left btn-left">
+                            <Translation>{(t) => t("Add")}</Translation> <b>+</b>
                           </Button>
                         </OverlayTrigger>
                       </div>
@@ -415,7 +415,7 @@ if (reviewerSelectedOption === "Specific Reviewers") {
                   </div>
                   <div>
                     <div>
-                      <hr className="mt-3" />
+                      <hr className="mt-1" />
                       <span
                         className="font-weight-bold"
                         title={t(
@@ -492,9 +492,8 @@ if (reviewerSelectedOption === "Specific Reviewers") {
                               </Popover>
                             )}
                           >
-                            <Button id="addClient" className="btn btn-primary btn-small ">
-                            <i className="fa-solid fa-plus mr-2"></i>
-                              <Translation>{(t) => t("Add")}</Translation>
+                            <Button id="addClient" className="btn btn-primary btn-md form-btn pull-left btn-left">
+                              <Translation>{(t) => t("Add")}</Translation> <b>+</b>
                             </Button>
                           </OverlayTrigger>
                         </div>
@@ -505,7 +504,7 @@ if (reviewerSelectedOption === "Specific Reviewers") {
 
                     <div>
                       <div>
-                        <hr className="mt-3" />
+                        <hr className="mt-1" />
                         <span
                           className="font-weight-bold"
                           title={t("Permission for submission tracking.")}
@@ -585,9 +584,8 @@ if (reviewerSelectedOption === "Specific Reviewers") {
                                 </Popover>
                               )}
                             >
-                              <Button id="addReviewer" className="btn btn-primary  btn-small ">
-                              <i className="fa-solid fa-plus mr-2"></i>
-                                <Translation>{(t) => t("Add")}</Translation>
+                              <Button id="addReviewer" className="btn btn-primary btn-md form-btn pull-left btn-left">
+                                <Translation>{(t) => t("Add")}</Translation> <b>+</b>
                               </Button>
                             </OverlayTrigger>
                           </div>

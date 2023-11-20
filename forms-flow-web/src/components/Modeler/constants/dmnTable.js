@@ -10,10 +10,9 @@ import {
   fetchAllDmnProcessesCount,
 } from "../../../apiManager/services/processServices";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { MULTITENANCY_ENABLED } from "../../../constants/constants";
-import { setDmnSearchText,setIsPublicDiagram } from "../../../actions/processActions";
-import { push } from "connected-react-router";
-
+import { setDmnSearchText } from "../../../actions/processActions";
 function DmnTable() {
   const dispatch = useDispatch();
   const dmn = useSelector((state) => state.process?.dmnProcessList);
@@ -49,7 +48,7 @@ function DmnTable() {
       )
     );
     setCountLoading(true);
-    fetchAllDmnProcessesCount(tenantKey, searchText)
+    fetchAllDmnProcessesCount(tenantKey, search)
       .then((result) => {
         setTotalProcess(result.data?.count || 0);
       })
@@ -78,13 +77,6 @@ function DmnTable() {
     setActivePage(1);
   };
 
-  const gotoEdit = (data) => {
-    if(MULTITENANCY_ENABLED){
-      dispatch(setIsPublicDiagram(data.tenantId ? true : false));
-    }
-   dispatch(push(`${redirectUrl}processes/dmn/${data.key}/edit`));
-  };
-
   const pageOptions = [
     { text: "5", value: 5 },
     { text: "10", value: 10 },
@@ -98,15 +90,15 @@ function DmnTable() {
     <div className="mt-3">
       <LoadingOverlay
         spinner
-        text={t("Loading...")}
+        text="Loading..."
         active={isLoading || countLoading}
       >
         <div style={{ minHeight: "400px" }}>
           <table className="table custom-table  table-responsive-sm mt-2">
             <thead>
               <tr>
-                <th scope="col">{t("Workflow Name")}</th>
                 <th scope="col">{t("Key")}</th>
+                <th scope="col">{t("Workflow Name")}</th>
                 <th scope="col">{t("Type")}</th>
                 <th colSpan="2">
                 <InputGroup className="input-group">
@@ -149,7 +141,7 @@ function DmnTable() {
                     style={{ height: "300px" }}
                     className="text-center"
                   >
-                   { isLoading ? null : t("No Dmn Found")}
+                    {t("No DMN Found")}
                   </td>
                 </tr>
               </tbody>
@@ -157,13 +149,15 @@ function DmnTable() {
               <tbody>
                 {dmn.map((processItem) => (
                   <tr key={processItem.id}>
-                    <td>{processItem.name}</td>
                     <td>{processItem.key}</td>
+                    <td>{processItem.name}</td>
                     <td>{t("DMN")}</td>
-                    <td className="d-flex justify-content-end w-100">
-                    <button className="btn btn-link" onClick={()=>{gotoEdit(processItem);}}> 
-                       <i className="fas fa-edit mr-2"/>
-                        {t("Edit Workflow")}</button>
+                    <td>
+                      <Link
+                        to={`${redirectUrl}processes/dmn/${processItem.key}/edit`}
+                      >
+                        {t("Edit Workflow")}
+                      </Link>
                     </td>
                   </tr>
                 ))}
