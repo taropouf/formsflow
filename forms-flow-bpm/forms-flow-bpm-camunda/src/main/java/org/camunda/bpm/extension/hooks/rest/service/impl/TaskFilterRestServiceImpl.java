@@ -185,10 +185,12 @@ public class TaskFilterRestServiceImpl implements TaskFilterRestService {
         if (halTasks != null && halTasks.length > 0) {
             List<String> variableNames = new ArrayList<>();
             List<TaskFilterVariableQueryDto> variables = filterQuery.getVariables();
-            for (TaskFilterVariableQueryDto dto : variables) {
-                if (dto != null && dto.getName() != null) {
-                    variableNames.add(dto.getName());
-                }
+            if (variables != null) {
+	            for (TaskFilterVariableQueryDto dto : variables) {
+	                if (dto != null && dto.getName() != null) {
+	                    variableNames.add(dto.getName());
+	                }
+	            }
             }
             if (!variableNames.isEmpty()) {
                 LinkedHashSet<String> variableScopeIds = getVariableScopeIds(halTasks);
