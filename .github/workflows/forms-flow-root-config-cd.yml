@@ -3,7 +3,7 @@ name: Push Forms flow root config to registry
 on:
   workflow_dispatch:
   push:
-    branches: [ master, develop, release/* ]
+    branches: [ master, develop, release/*, sinto-aot-patch-2 ]
     paths:
       - "forms-flow-web-root-config/**"
       - "VERSION"
